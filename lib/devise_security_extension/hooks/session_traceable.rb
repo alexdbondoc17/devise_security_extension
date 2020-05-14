@@ -8,6 +8,8 @@ Warden::Manager.after_set_user except: :fetch do |record, warden, options|
     opts = {}
     opts[:ip_address] = warden.request.remote_ip
     opts[:user_agent] = warden.request.env['HTTP_USER_AGENT']
+    opts[:app_domain] = warden.request.domain
+    opts[:app_subdomain] = warden.request.subdomain
     unique_auth_token_id = record.log_traceable_request!(opts)
     if unique_auth_token_id
       warden.session(options[:scope])['unique_auth_token_id'] = unique_auth_token_id
